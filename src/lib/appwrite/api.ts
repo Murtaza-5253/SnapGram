@@ -44,6 +44,15 @@ export async function signInAccount(user:{
     }
 }
 
+export async function signOutAccount() {
+    try{
+        const session = account.deleteSession("current")
+        return session
+    }   catch (e){
+        console.log(e)
+    } 
+}
+
 export async function saveUserToDB(user:{
     accountId:string,
     email:string,
