@@ -13,8 +13,8 @@ export const SignInValidation = z.object({
 });
 
 export const PostValidation = z.object({
-  caption:z.string().min(5).max(22),
+  caption:z.string(),
   file:z.custom<File[]>(),
-  location:z.string().min(2).max(100),
+  location:z.string(),
   tags:z.string()
 })
