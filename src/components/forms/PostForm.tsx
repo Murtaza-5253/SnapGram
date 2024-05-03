@@ -56,9 +56,9 @@ const PostForm = ({post,action}:PostFormProps) => {
           userId:user.id
         })
         
-        if(newPost){
+        if(newPost!==null || newPost!==undefined){
           toast({
-            title: "Please try again...",
+            title: `${action} failed. Please try again...`,
           })
         }
         navigate("/")

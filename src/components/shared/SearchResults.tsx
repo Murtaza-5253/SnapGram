@@ -1,16 +1,17 @@
-import { Models } from "appwrite";
+
 import { Loader } from "lucide-react";
 import GridPostList from "./GridPostList";
 
 type SearchResultProps = {
-    isSearchFething:boolean;
-    searchedPosts:Models.Document[];
+    isSearchFetching:boolean;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    searchedPost:any;
 }
-const SearchResults = ({isSearchFetching,searchedPosts}:SearchResultProps) => {
+const SearchResults = ({isSearchFetching,searchedPost}:SearchResultProps) => {
     if(isSearchFetching) return <Loader/>
-    if(searchedPosts && searchedPosts.documents.length>0){
+    if(searchedPost && searchedPost.documents.length>0){
         return (
-            <GridPostList posts={searchedPosts.documents}/>
+            <GridPostList posts={searchedPost.documents!}/>
         )
     }
   return (

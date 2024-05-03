@@ -1,6 +1,6 @@
 import { INewPost, INewUser, IUpdatePost } from "@/types"
 import { account, appwriteConfig, avatars, databases, storage } from "./config"
-import { ID, Query } from "appwrite"
+import { ID, ImageGravity, Query } from "appwrite"
 
 
 export async function createUserAccount(user:INewUser){
@@ -153,7 +153,7 @@ export async function getFilePreview(fileID:string) {
             fileID,
             2000,
             2000,
-            "top",
+            ImageGravity.Top,
             100,
         );
         return fileUrl;
@@ -279,7 +279,7 @@ export async function updatePost(post:IUpdatePost) {
             {
                 caption:post.caption,
                 imageUrl:image.imageUrl,
-                imageId:image.id,
+                imageId:image.imageId,
                 location:post.location,
                 tags:tags,
             }
@@ -311,7 +311,8 @@ export async function deletePost(postId: string,imageId:string){
 }
 
 export async function getInfinitePosts({pageParam}:{pageParam:number}) {
-    const queries:any[] = [Query.orderDesc('$updatedAt'),Query.limit(10)] 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const queries: any[] = [Query.orderDesc('$updatedAt'),Query.limit(9)] 
     if(pageParam){
         queries.push(Query.cursorAfter(pageParam.toString()))
     }
