@@ -77,7 +77,7 @@ export async function getCurrentUser() {
     try{
         const currentAccount = await account.get();
         if(!currentAccount){
-            return false
+            throw Error
         }
         const currentUser = await databases.listDocuments(
             appwriteConfig.databaseId,
