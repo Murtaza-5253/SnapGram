@@ -76,11 +76,13 @@ export async function saveUserToDB(user:{
 export async function getCurrentUser() {
     try{
         const currentAccount = await account.get();
-        if(!currentAccount)throw Error;
+        if(!currentAccount){
+            return false
+        }
         const currentUser = await databases.listDocuments(
             appwriteConfig.databaseId,
             appwriteConfig.userCollectionId,
-            [Query.equal('accountId',currentAccount.$id)],
+            [Query.equal('accountId',(currentAccount).$id)],
         )
         if(!currentUser)throw Error;
         return currentUser.documents[0];

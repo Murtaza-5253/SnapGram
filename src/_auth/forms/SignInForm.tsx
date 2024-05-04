@@ -22,7 +22,7 @@ const SignInForm = () => {
   const { toast } = useToast()
   const {checkAuthUser,isLoading:isUserLoading}=useUserContext();
   // const {mutateAsync:createUserAccount,isLoading:isCreatingAccount} = useCreateUserAccount();
-  const {mutateAsync:signInAccount} = useSignInAccount();
+  const {mutateAsync:signInAccount,isPending} = useSignInAccount();
 
   const navigate = useNavigate();
   const form = useForm<z.infer<typeof SignInValidation>>({
@@ -47,7 +47,7 @@ const SignInForm = () => {
       });
     }
 
-    const isLoggedIn = await  checkAuthUser();
+    const isLoggedIn = await checkAuthUser();
     if(isLoggedIn){
       form.reset();
       navigate("/");
@@ -57,6 +57,7 @@ const SignInForm = () => {
         variant: "destructive",
         title: "Sign in failed.Please try again",
       });
+      return;
     }
 
   }
@@ -105,7 +106,7 @@ const SignInForm = () => {
             )}
           />
           <Button type="submit" className="shad-button_primary">
-          {isUserLoading ? (
+          {isUserLoading || isPending? (
             <div className="flex-center gap-2">
             <Loader/>
             Loading...

@@ -1,6 +1,7 @@
 
-import { Loader } from "lucide-react";
+
 import GridPostList from "./GridPostList";
+import Loader from "./Loader";
 
 type SearchResultProps = {
     isSearchFetching:boolean;

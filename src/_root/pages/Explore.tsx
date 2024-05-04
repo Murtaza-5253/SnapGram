@@ -1,4 +1,5 @@
 import GridPostList from "@/components/shared/GridPostList";
+import Loader from "@/components/shared/Loader";
 import SearchResults from "@/components/shared/SearchResults";
 import { Input } from "@/components/ui/input";
 import useDebounce from "@/hooks/useDebounce";
@@ -6,7 +7,7 @@ import {
   useGetPosts,
   useSearchPosts,
 } from "@/lib/react-query/queriesAndMutations";
-import { Loader } from "lucide-react";
+
 import { useState, useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 
