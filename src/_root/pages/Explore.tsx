@@ -19,7 +19,10 @@ const Explore = () => {
   const { data: searchedPost, isFetching: isSearchFetching } =
     useSearchPosts(debouncedValue);
   useEffect(() => {
-    if (inView && !searchValue) fetchNextPage();
+    if (inView && !searchValue){
+      fetchNextPage()
+      console.log("here");
+    }  
   }, [inView, searchValue]);
   if (!posts) {
     return (
@@ -81,12 +84,14 @@ const Explore = () => {
             ))
           )}
         </div>
-      </div>
-      {hasNextPage && !searchValue && (
+        {hasNextPage && !searchValue && (
         <div ref={ref} className="mt-10">
           <Loader />
+          
         </div>
       )}
+      </div>
+      
     </div>
   );
 };

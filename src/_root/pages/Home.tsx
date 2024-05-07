@@ -1,11 +1,17 @@
 import Loader from "@/components/shared/Loader";
 import PostCard from "@/components/shared/PostCard";
 import { useGetRecentPosts } from "@/lib/react-query/queriesAndMutations";
-import { Models } from "appwrite";
+
+import { useEffect } from "react";
+import { useInView } from "react-intersection-observer";
 
 
 const Home = () => {
-  const {data:posts,isPending:isPostLoading,isError:isErrorPosts}=useGetRecentPosts()
+  const { ref, inView } = useInView();
+  const {data:posts,isPending:isPostLoading,isError:isErrorPosts,fetchNextPage, hasNextPage}=useGetRecentPosts()
+  useEffect(() => {
+    if (inView ) fetchNextPage();
+  }, [inView]);
   if (isErrorPosts) {
     return (
       <div className="flex flex-1">
@@ -29,13 +35,25 @@ const Home = () => {
             <Loader/>
           ):(
             <ul className="flex flex-col flex-1 gap-9 w-full">
-              {posts?.documents.map((post:Models.Document)=>(
-                <PostCard post={post} key={post.caption}/>
+              
+              {posts?.pages?.map((post?,index?)=>(
+                
+                // <p>{post.documents.creator}</p>
+                // <p key={index}>{post.creator}</p>
+                <PostCard posts={post?.documents} key={`page-${index}`}/>
+             
               ))}
             </ul>
           )}
         </div>
+        {hasNextPage  && (
+        <div ref={ref} className="mt-10">
+          <Loader />
+          
+        </div>
+      )}
       </div>
+      
     </div>
   );
 };

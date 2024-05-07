@@ -5,14 +5,15 @@ import { Link } from "react-router-dom";
 import PostStats from "./PostStats";
 
 type PostCardProps = {
-  post: Models.Document;
+  posts: Models.Document[];
 };
-const PostCard = ({ post }: PostCardProps) => {
+const PostCard = ({ posts }: PostCardProps) => {
     const {user}=useUserContext();
-
-    if(!post.creator) return;
+    if(!posts[0].creator) return;
   return (
-    <div className="post-card">
+    <>
+    {posts?.map((post)=>(
+      <div className="post-card">
       <div className="flex-between">
         <div className="flex items-center gap-3">
           <Link to={`/profile/${post.creator.$id}`}>
@@ -40,8 +41,8 @@ const PostCard = ({ post }: PostCardProps) => {
             </div>
           </div>
         </div>
-        <Link to={`/update-post/${post.$id}`}
-            className={`${user?.id!==post.creator.$id && "hidden"}`}
+        <Link to={`/update-post/${post?.$id}`}
+            className={`${user?.id!==post?.creator?.$id && "hidden"}`}
         >
             <img 
             src="/assets/icons/edit.svg" 
@@ -50,11 +51,11 @@ const PostCard = ({ post }: PostCardProps) => {
             height={20} />
         </Link>
       </div>
-      <Link to={`/posts/${post.$id}`}>
+      <Link to={`/posts/${post?.$id}`}>
         <div className="small-medium lg:base-medium py-5">
             <p>{post?.caption}</p>
             <ul className="flex gap-1 mt-2">
-              {post?.tags.map((tag:string)=>(
+              {post?.tags?.map((tag:string)=>(
                 <li key={tag} className="text-light-3">
                     #{tag}
                 </li>
@@ -70,6 +71,11 @@ const PostCard = ({ post }: PostCardProps) => {
 
       <PostStats post={post} userId={user.id}/>
     </div>
+    ))}
+    </>
+      
+    
+    
   );
 };
 
