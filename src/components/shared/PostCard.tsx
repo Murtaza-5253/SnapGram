@@ -9,7 +9,10 @@ type PostCardProps = {
 };
 const PostCard = ({ posts }: PostCardProps) => {
     const {user}=useUserContext();
-    if(!posts[0].creator) return;
+    if(!posts){
+      <p className="base-medium lg:body-bold text-light-3">End of posts</p>
+      return;
+    }
   return (
     <>
     {posts?.map((post)=>(

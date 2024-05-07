@@ -356,3 +356,17 @@ export async function searchPosts(searchTerm:string) {
     }
     
 }
+
+export async function getUsers(limit?:number) {
+    try {
+        const users = await databases.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.userCollectionId,
+            [Query.orderDesc('$createdAt'),Query.limit(10)]
+        )
+        if(!users) throw Error;
+        return users;
+    } catch (error) {
+        console.log(error)
+    }
+}
