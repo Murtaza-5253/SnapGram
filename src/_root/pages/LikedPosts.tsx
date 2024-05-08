@@ -1,26 +1,24 @@
-import GridPostList from "@/components/shared/GridPostList"
-import Loader from "@/components/shared/Loader"
-import { useGetCurrentUser } from "@/lib/react-query/queriesAndMutations"
-
+import GridPostList from "@/components/shared/GridPostList";
+import Loader from "@/components/shared/Loader";
+import { useGetCurrentUser } from "@/lib/react-query/queriesAndMutations";
 
 const LikedPosts = () => {
-  const {data:currentUser} = useGetCurrentUser()
-  if(!currentUser){
-    return(
+  const { data: currentUser } = useGetCurrentUser();
+  if (!currentUser) {
+    return (
       <div className="flex-center w-full h-full">
-
-        <Loader/>
+        <Loader />
       </div>
-    )
+    );
   }
   return (
     <>
-    {currentUser.liked.length === 0 && (
-      <p className="text-light-4">No liked Posts</p>
-    )}
-    <GridPostList posts={currentUser.liked} showStats={false}/>
+      {currentUser.liked.length === 0 && (
+        <p className="text-light-4">No liked Posts</p>
+      )}
+      <GridPostList posts={currentUser.liked} showStats={false} />
     </>
-  )
-}
+  );
+};
 
-export default LikedPosts
+export default LikedPosts;

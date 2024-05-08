@@ -1,6 +1,9 @@
 import Loader from "@/components/shared/Loader";
 import { useUserContext } from "@/context/AuthContext";
-import { useGetUserById, useUpdateUser } from "@/lib/react-query/queriesAndMutations";
+import {
+  useGetUserById,
+  useUpdateUser,
+} from "@/lib/react-query/queriesAndMutations";
 import { useParams } from "react-router-dom";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -25,14 +28,15 @@ import { useToast } from "@/components/ui/use-toast";
 const UpdateProfile = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { user,setUser } = useUserContext();
+  const { user, setUser } = useUserContext();
   const { data: currentUser } = useGetUserById(id || "");
-  const {toast} = useToast();
-  const {mutateAsync:updateUser,isPending:isLoadingUpdate}=useUpdateUser();
+  const { toast } = useToast();
+  const { mutateAsync: updateUser, isPending: isLoadingUpdate } =
+    useUpdateUser();
   const form = useForm<z.infer<typeof ProfileValidation>>({
     resolver: zodResolver(ProfileValidation),
     defaultValues: {
-      file:[],
+      file: [],
       name: user?.name,
       email: user?.email,
       username: user?.username,
@@ -42,35 +46,34 @@ const UpdateProfile = () => {
   if (!currentUser) {
     return (
       <div className="flex-center w-full h-full">
-        <Loader/>
+        <Loader />
       </div>
     );
   }
-  
-  const handleUpdate = async (value:z.infer<typeof ProfileValidation>) => {
+
+  const handleUpdate = async (value: z.infer<typeof ProfileValidation>) => {
     const updatedUser = await updateUser({
       userId: currentUser.$id,
       name: value?.name,
       bio: value?.bio,
       file: value?.file,
-      imageUrl:currentUser.imageUrl,
-      imageId:currentUser.imageId,
+      imageUrl: currentUser.imageUrl,
+      imageId: currentUser.imageId,
     });
-    if(!updatedUser) {
+    if (!updatedUser) {
       toast({
-        title:"Update user failed...Please try again."
-      })
+        title: "Update user failed...Please try again.",
+      });
     }
     setUser({
       ...user,
       name: updatedUser?.name,
       bio: updatedUser?.bio,
       imageUrl: updatedUser?.imageUrl,
-    })
+    });
     return navigate(`/profile/${id}`);
-  }
+  };
 
-  
   return (
     <div className="flex flex-1">
       <div className="common-container">
@@ -95,7 +98,13 @@ const UpdateProfile = () => {
               render={({ field }) => (
                 <FormItem className="flex">
                   <FormControl>
-                    <ProfileUploader fieldChange={field.onChange} mediaUrl={currentUser.imageUrl || "/assets/icons/profile-placeholder.svg"}/>
+                    <ProfileUploader
+                      fieldChange={field.onChange}
+                      mediaUrl={
+                        currentUser.imageUrl ||
+                        "/assets/icons/profile-placeholder.svg"
+                      }
+                    />
                   </FormControl>
                   <FormMessage className="shad-form_message" />
                 </FormItem>
@@ -108,11 +117,7 @@ const UpdateProfile = () => {
                 <FormItem>
                   <FormLabel className="shad-form_label">Name</FormLabel>
                   <FormControl>
-                    <Input
-                      type="text"
-                      className="shad-input"
-                      {...field}
-                    />
+                    <Input type="text" className="shad-input" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -162,34 +167,35 @@ const UpdateProfile = () => {
                 <FormItem>
                   <FormLabel className="shad-form_label">Bio</FormLabel>
                   <FormControl>
-                  <Textarea
-                  className="shad-textarea custom-scrollbar"
-                  {...field}
-                    
-                />
+                    <Textarea
+                      className="shad-textarea custom-scrollbar"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <div className="flex gap-4 items-center justify-end">
-          <Button type="button" className="shad-button_dark_4 px-5" onClick={()=>navigate(-1)}>
-            Cancel
-          </Button>
-          <Button
-            type="submit"
-            className="shad-button_primary whitespace-nowrap px-5"
-            disabled={isLoadingUpdate}
-          >
-            {isLoadingUpdate && <Loader/>}
-            Update profile
-          </Button>
-        </div>
+              <Button
+                type="button"
+                className="shad-button_dark_4 px-5"
+                onClick={() => navigate(-1)}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                className="shad-button_primary whitespace-nowrap px-5"
+                disabled={isLoadingUpdate}
+              >
+                {isLoadingUpdate && <Loader />}
+                Update profile
+              </Button>
+            </div>
           </form>
         </Form>
-        
       </div>
-      
     </div>
   );
 };
