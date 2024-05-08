@@ -18,3 +18,11 @@ export const PostValidation = z.object({
   location:z.string(),
   tags:z.string()
 })
+
+export const ProfileValidation = z.object({
+  file: z.custom<File[]>(),
+  name: z.string().min(2, "Too Short"),
+  username:z.string(),
+  email:z.string(),
+  bio: z.string(),
+})
