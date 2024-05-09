@@ -346,7 +346,7 @@ export async function getUsers(limit?: number) {
     const users = await databases.listDocuments(
       appwriteConfig.databaseId,
       appwriteConfig.userCollectionId,
-      [Query.orderDesc("$createdAt"), Query.limit(limit)]
+      [Query.orderDesc("$createdAt"), Query.limit(limit!)]
     );
     if (!users) throw Error;
     return users;
