@@ -422,3 +422,18 @@ export async function updateUser(user: IUpdateUser) {
     console.log(error);
   }
 }
+
+export async function getUserPosts(id?: string) {
+  try {
+    const queries: any[] = [Query.equal("creator", id!), Query.orderDesc("$createdAt")];
+    const post = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.postCollectionId,
+      queries,
+    );
+    if (!post) throw Error;
+    return post;
+  } catch (error) {
+    console.log(error);
+  }
+}

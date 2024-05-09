@@ -5,6 +5,7 @@ import {
   Outlet,
   useParams,
   useLocation,
+  useNavigate,
 } from "react-router-dom";
 
 import { LikedPosts } from "@/_root/pages";
@@ -21,6 +22,7 @@ const Profile = () => {
   const { pathname } = useLocation();
 
   const { data: currentUser } = useGetUserById(id || "");
+  const navigate = useNavigate()
 
   if (!currentUser)
     return (
@@ -31,6 +33,20 @@ const Profile = () => {
 
   return (
     <div className="profile-container">
+      <div className="hidden md:flex max-w-5xl w-full">
+        <Button
+          onClick={() => navigate(-1)}
+          variant="ghost"
+          className="shad-button_ghost">
+          <img
+            src={"/assets/icons/back.svg"}
+            alt="back"
+            width={24}
+            height={24}
+          />
+          <p className="small-medium lg:base-medium">Back</p>
+        </Button>
+      </div>
       <div className="profile-inner_container">
         <div className="flex xl:flex-row flex-col max-xl:items-center flex-1 gap-7">
           <img

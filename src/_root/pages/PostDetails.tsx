@@ -1,19 +1,46 @@
+import GridPostList from "@/components/shared/GridPostList";
 import Loader from "@/components/shared/Loader";
 import PostStats from "@/components/shared/PostStats";
 import { Button } from "@/components/ui/button";
 import { useUserContext } from "@/context/AuthContext";
-import { useGetPostById } from "@/lib/react-query/queriesAndMutations";
+import { useDeletePost, useGetPostById, useGetUserPosts } from "@/lib/react-query/queriesAndMutations";
 import { multiFormatDateString } from "@/lib/utils";
 
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 const PostDetails = () => {
   const { id } = useParams();
+
   const { user } = useUserContext();
+
+  const navigate=useNavigate();
   const { data: post, isPending } = useGetPostById(id || "");
-  const handleDeletePost = () => {};
+  const {data:userPosts,isPending:isUserLoading} = useGetUserPosts(post?.creator?.$id)
+  const {mutate:deletePost}=useDeletePost();
+  const relatedPosts = userPosts?.documents?.filter((userPost)=>userPost?.$id!==id);
+  const handleDeletePost = () => {
+    deletePost({
+      postId: id!,
+      imageId:post?.imageId,
+    })
+    navigate(-1)
+  };
   return (
     <div className="post_details-container">
+      <div className="hidden md:flex max-w-5xl w-full">
+        <Button
+          onClick={() => navigate(-1)}
+          variant="ghost"
+          className="shad-button_ghost">
+          <img
+            src={"/assets/icons/back.svg"}
+            alt="back"
+            width={24}
+            height={24}
+          />
+          <p className="small-medium lg:base-medium">Back</p>
+        </Button>
+      </div>
       {isPending ? (
         <Loader />
       ) : (
@@ -26,7 +53,7 @@ const PostDetails = () => {
           <div className="post_details-info">
             <div className="flex-between w-full">
               <Link
-                to={`/profile/${post?.creator.$id}`}
+                to={`/profile/${post?.creator?.$id}`}
                 className="flex items-center gap-3"
               >
                 <img
@@ -98,6 +125,16 @@ const PostDetails = () => {
           </div>
         </div>
       )}
+      <div className="w-full max-w-5xl">
+          <hr className="border w-full border-dark-4/80"/>
+
+          <h3 className="body-bold md:h3-bold w-full my-10">More Related Posts</h3>
+          {isUserLoading || !relatedPosts ? (
+            <Loader/>
+          ):(
+            <GridPostList posts={relatedPosts} />
+          )}
+      </div>
     </div>
   );
 };
